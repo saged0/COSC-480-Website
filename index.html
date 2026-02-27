@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio | Pure HTML CSS JS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home">Your Name</a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">☰</button>
+    <nav id="main-nav">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+      <a class="btn small" href="#">Resume</a>
+      <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">◐</button>
+    </nav>
+  </header>
+
+  <main id="home">
+    <section class="hero section" id="about">
+      <div>
+        <p class="eyebrow">Hi, I'm</p>
+        <h1><span class="gradient">AI Engineer</span></h1>
+        <p class="lead">I build scalable, high-performance applications using JavaScript, TypeScript, React, Node.js, and cloud services.</p>
+        <p>From intuitive frontends to robust APIs and AI workflows, I deliver practical products with clean architecture.</p>
+        <div class="socials">
+          <a href="#" aria-label="GitHub">GitHub</a>
+          <a href="#" aria-label="LinkedIn">LinkedIn</a>
+          <a href="#" aria-label="Email">Email</a>
+        </div>
+      </div>
+      <figure class="portrait glow-box">
+        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80" alt="Profile" />
+      </figure>
+    </section>
+
+    <section class="section" id="experience">
+      <h2>Work Experience</h2>
+      <div class="timeline">
+        <article class="card timeline-item">
+          <div class="dot"></div>
+          <h3>Software Engineer</h3>
+          <p class="company">Cognizant, Noida</p>
+          <p class="meta">Sep 2022 — Present</p>
+          <ul>
+            <li>Developed scalable REST APIs with Node.js and Express.</li>
+            <li>Built reusable frontend components and improved delivery speed.</li>
+            <li>Led quality and release improvements for multiple deployments.</li>
+          </ul>
+        </article>
+        <article class="card timeline-item">
+          <div class="dot"></div>
+          <h3>Intern</h3>
+          <p class="company">Cognizant, Noida</p>
+          <p class="meta">Feb 2022 — Sep 2022</p>
+          <ul>
+            <li>Worked on Java and Spring-based services.</li>
+            <li>Created APIs and connected relational databases.</li>
+            <li>Collaborated on cloud deployments.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="skills">
+      <h2>Technical Skills</h2>
+      <div class="grid two">
+        <article class="card">
+          <h3><span class="gradient">Programming Languages</span></h3>
+          <div class="chips">
+            <span>JavaScript</span><span>TypeScript</span><span>Java</span><span>SQL</span>
+          </div>
+        </article>
+        <article class="card">
+          <h3><span class="gradient">Backend Technologies</span></h3>
+          <div class="chips">
+            <span>Node.js</span><span>Express</span><span>Spring Boot</span><span>PostgreSQL</span><span>MongoDB</span>
+          </div>
+        </article>
+        <article class="card">
+          <h3><span class="gradient">Frontend Technologies</span></h3>
+          <div class="chips">
+            <span>HTML5</span><span>CSS3</span><span>React</span><span>Vue</span>
+          </div>
+        </article>
+        <article class="card">
+          <h3><span class="gradient">Developer Tools</span></h3>
+          <div class="chips">
+            <span>Git</span><span>GitHub</span><span>VS Code</span><span>AWS</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <h2>Projects</h2>
+      <div class="grid three">
+        <article class="card">
+          <h3>AI-Powered Chatbot</h3>
+          <p><b>Period:</b> Apr 2025 — May 2025</p>
+          <ul>
+            <li>Built conversational AI workflows with MERN stack.</li>
+            <li>Implemented real-time updates using sockets.</li>
+          </ul>
+          <div class="chips"><span>React</span><span>Node.js</span><span>MongoDB</span></div>
+        </article>
+        <article class="card">
+          <h3>Movie Mahal</h3>
+          <p><b>Period:</b> Jan 2023 — Jun 2023</p>
+          <ul>
+            <li>Created a movie discovery app using React and Redux.</li>
+            <li>Used TMDB APIs and responsive layouts.</li>
+          </ul>
+          <div class="chips"><span>React</span><span>Redux</span><span>TMDB</span></div>
+        </article>
+        <article class="card">
+          <h3>Task Management System</h3>
+          <p><b>Period:</b> May 2025 — Present</p>
+          <ul>
+            <li>Built collaborative dashboards using TypeScript + Express.</li>
+            <li>Delivered live updates with WebSockets.</li>
+          </ul>
+          <div class="chips"><span>TypeScript</span><span>Express</span><span>PostgreSQL</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <h2>Contact</h2>
+      <div class="card">
+        <p>Want a similar site? Start with static HTML sections, CSS utility classes, and small JS enhancements (theme toggle + scroll effects).</p>
+        <a class="btn" href="mailto:hello@example.com">Let's Connect</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
