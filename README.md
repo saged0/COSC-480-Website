@@ -18,6 +18,7 @@ Node.js + Express project with:
 - `app.js`: Session tutorial app on port `4000`
 - `db.js`: MySQL pool/config helpers
 - `views/index.html`: Login form
+- `views/user.html`: Logged-in user page
 - `views/app.css`: Login form styles
 - `.env.example`: Environment variable template
 
@@ -38,15 +39,18 @@ Example values are documented in `.env.example`.
 ```bash
 npm start
 ```
+This entrypoint includes login plus the MySQL-backed `/api/notes` routes.
 
 - Session tutorial app (port 4000):
 ```bash
 npm run start:session
 ```
+This entrypoint is focused on the session/login flow and does not use the notes API.
 
 ## Default Routes (main app)
 - `GET /` login page (or welcome if logged in)
 - `POST /user` login submit
+- `GET /user` logged-in page
 - `GET /logout` logout and clear session
 - `GET /lecture0-exercises` static HTML exercise page
 - `GET /api/notes` list notes
