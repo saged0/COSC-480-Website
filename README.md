@@ -67,7 +67,7 @@ Session/auth variables:
 
 ## Security Notes
 - Do not commit `.env` (already ignored by `.gitignore`).
-- Rotate any password that was ever exposed in logs, screenshots, or chat.
+- Rotate any password that was ever exposed in logs or screenshots.
 - Use a long, random `SESSION_SECRET` in real deployments.
 
 ## Troubleshooting
