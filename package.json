@@ -3,14 +3,20 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run check",
+    "check": "node --check server.js && node --check app.js",
     "start": "node server.js",
     "start:session": "node app.js"
   },
-  "keywords": [],
+  "keywords": [
+    "node",
+    "express",
+    "sessions",
+    "mysql"
+  ],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Session-based login and MySQL notes API for COSC-480 exercises.",
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.3.1",
