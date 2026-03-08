@@ -54,6 +54,16 @@ This entrypoint is focused on the tutorial session/login flow.
 - `GET /logout` logout and clear session
 - `GET /lecture0-exercises` static HTML exercise page
 
+## Screenshots
+### Login page
+<img src="docs/images/login-page.png" alt="Login page" width="800" />
+
+### Failed login state
+<img src="docs/images/login-failed-popup.png" alt="Login unsuccessful popup" width="800" />
+
+### Successful login state
+<img src="docs/images/user-page.png" alt="Logged-in user page" width="800" />
+
 ## Environment Variables
 Required for database-backed features:
 - `DB_HOST`
@@ -95,13 +105,3 @@ SHOW TABLES;
 DESCRIBE users;
 SELECT * FROM users;
 ```
-
-## Screenshots
-### Login page
-![Login page](docs/images/login-page.png)
-
-### Failed login state
-![Login unsuccessful popup](docs/images/login-failed-popup.png)
-
-### Successful login state
-![Logged-in user page](docs/images/user-page.png)
