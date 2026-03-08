@@ -95,3 +95,13 @@ SHOW TABLES;
 DESCRIBE users;
 SELECT * FROM users;
 ```
+
+## Screenshots
+### Login page
+![Login page](docs/images/login-page.png)
+
+### Failed login state
+![Login unsuccessful popup](docs/images/login-failed-popup.png)
+
+### Successful login state
+![Logged-in user page](docs/images/user-page.png)
