@@ -39,19 +39,37 @@ async function initializeDatabase() {
 
   const databasePool = getPool();
   const connection = await databasePool.getConnection();
+  const seedUsername = process.env.LOGIN_USERNAME || 'user1';
+  const seedPassword = process.env.LOGIN_PASSWORD || 'mypassword';
 
   try {
     await connection.ping();
     await connection.query(
-      `CREATE TABLE IF NOT EXISTS notes (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        content TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      `CREATE TABLE IF NOT EXISTS users (
+        user_id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(100) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL
       )`
+    );
+
+    // Seed one login account for local development if it does not already exist.
+    await connection.execute(
+      'INSERT IGNORE INTO users (username, password) VALUES (?, ?)',
+      [seedUsername, seedPassword]
     );
   } finally {
     connection.release();
   }
+}
+
+async function authenticateUser(username, password) {
+  const databasePool = getPool();
+  const [rows] = await databasePool.execute(
+    'SELECT username FROM users WHERE username = ? AND password = ? LIMIT 1',
+    [username, password]
+  );
+
+  return rows[0] || null;
 }
 
 function getDatabaseErrorDetails(error) {
@@ -64,8 +82,8 @@ function getDatabaseErrorDetails(error) {
 }
 
 module.exports = {
-  getPool,
   isDatabaseConfigured,
   initializeDatabase,
+  authenticateUser,
   getDatabaseErrorDetails
 };
