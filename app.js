@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cookieParser = require('cookie-parser');
 const sessions = require('express-session');
 
@@ -38,7 +39,7 @@ let session;
 app.get('/', (req, res) => {
   session = req.session;
   if (session.userid) {
-    res.send("Welcome User <a href='/logout'>click to logout</a>");
+    res.redirect('/user');
   } else {
     res.sendFile('views/index.html', { root: __dirname });
   }
@@ -49,10 +50,19 @@ app.post('/user', (req, res) => {
     session = req.session;
     session.userid = req.body.username;
     console.log(req.session);
-    res.send("Hey there, welcome <a href='/logout'>click to logout</a>");
+    res.redirect('/user');
   } else {
     res.redirect('/?loginError=1');
   }
+});
+
+app.get('/user', (req, res) => {
+  session = req.session;
+  if (!session.userid) {
+    return res.redirect('/');
+  }
+
+  return res.sendFile(path.join(__dirname, 'views', 'user.html'));
 });
 
 app.get('/logout', (req, res) => {

@@ -44,7 +44,7 @@ app.use(cookieParser());
 app.get('/', (req, res) => {
   session = req.session;
   if (session.userid) {
-    return res.send("Welcome User <a href='/logout'>click to logout</a>");
+    return res.redirect('/user');
   }
 
   return res.sendFile(path.join(__dirname, 'views', 'index.html'));
@@ -55,10 +55,19 @@ app.post('/user', (req, res) => {
     session = req.session;
     session.userid = req.body.username;
     console.log(req.session);
-    return res.send("Hey there, welcome <a href='/logout'>click to logout</a>");
+    return res.redirect('/user');
   }
 
   return res.redirect('/?loginError=1');
+});
+
+app.get('/user', (req, res) => {
+  session = req.session;
+  if (!session.userid) {
+    return res.redirect('/');
+  }
+
+  return res.sendFile(path.join(__dirname, 'views', 'user.html'));
 });
 
 app.get('/logout', (req, res) => {
