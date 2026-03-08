@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/views/app.css">
+</head>
+<body>
+    <form action="/user" method="post">
+        <h2>Login</h2>
+        <div class="input-field">
+            <input type="text" name="username" id="username" placeholder="Enter Username">
+        </div>
+        <div class="input-field">
+            <input type="password" name="password" id="password" placeholder="Enter Password">
+        </div>
+        <input type="submit" value="LogIn">
+    </form>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('loginError') === '1') {
+            alert('Invalid username or password');
+            window.history.replaceState({}, document.title, '/');
+        }
+    </script>
+</body>
+</html>
