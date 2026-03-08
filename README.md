@@ -2,7 +2,7 @@
 
 Node.js + Express project with:
 - Session-based login demo (`/`, `/user`, `/logout`)
-- Notes API backed by MySQL (`/api/notes`)
+- Login credentials backed by MySQL (`users` table)
 - Static HTML/CSS practice page (`/lecture0-exercises`)
 
 ## Tech Stack
@@ -14,9 +14,9 @@ Node.js + Express project with:
 - mysql2
 
 ## Project Structure
-- `server.js`: Main app on port `3000` (login + notes API)
+- `server.js`: Main app on port `3000` (DB-backed login + sessions)
 - `app.js`: Session tutorial app on port `4000`
-- `db.js`: MySQL pool/config helpers
+- `db.js`: MySQL connection and user auth helpers
 - `views/index.html`: Login form
 - `views/user.html`: Logged-in user page
 - `views/app.css`: Login form styles
@@ -39,13 +39,13 @@ Example values are documented in `.env.example`.
 ```bash
 npm start
 ```
-This entrypoint includes login plus the MySQL-backed `/api/notes` routes.
+This entrypoint uses MySQL-backed credentials for login and keeps session state with `express-session`.
 
 - Session tutorial app (port 4000):
 ```bash
 npm run start:session
 ```
-This entrypoint is focused on the session/login flow and does not use the notes API.
+This entrypoint is focused on the tutorial session/login flow.
 
 ## Default Routes (main app)
 - `GET /` login page (or welcome if logged in)
@@ -53,8 +53,6 @@ This entrypoint is focused on the session/login flow and does not use the notes 
 - `GET /user` logged-in page
 - `GET /logout` logout and clear session
 - `GET /lecture0-exercises` static HTML exercise page
-- `GET /api/notes` list notes
-- `POST /api/notes` create note (`{ "content": "..." }`)
 
 ## Environment Variables
 Required for database-backed features:
@@ -65,8 +63,8 @@ Required for database-backed features:
 - `DB_NAME`
 
 Session/auth variables:
-- `LOGIN_USERNAME`
-- `LOGIN_PASSWORD`
+- `LOGIN_USERNAME` (seed user inserted on startup if missing)
+- `LOGIN_PASSWORD` (seed password for that user)
 - `SESSION_SECRET`
 
 ## Security Notes
@@ -76,5 +74,24 @@ Session/auth variables:
 
 ## Troubleshooting
 - If `npm start` fails with DB errors, verify `.env` values and that MySQL is running.
-- If login fails, confirm `LOGIN_USERNAME` and `LOGIN_PASSWORD` in `.env`.
+- If login fails, confirm a matching record exists in MySQL `users` table.
 - If port `3000` is busy, stop the other process using it and restart.
+
+## Optional: Verify Database Quickly
+If login works, your DB setup is likely fine. If you want to verify manually:
+
+In MySQL Workbench:
+- Open the `Schemas` tab (bottom-left), refresh, and expand `credentials`.
+- Open table `users` and run `SELECT * FROM users;`.
+
+In terminal:
+```bash
+mysql -u root -p
+```
+Then run:
+```sql
+USE credentials;
+SHOW TABLES;
+DESCRIBE users;
+SELECT * FROM users;
+```
