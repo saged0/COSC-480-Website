@@ -115,12 +115,12 @@ npm run deploy:sepolia
 
 ## Screenshots
 
-[Login page]
+![Login page](docs/images/login-page.png)
 
-[Dashboard with MetaMask connected]
+![Dashboard with MetaMask connected](docs/images/meta-mask.png)
 
-[Ticket purchase flow]
+![Ticket purchase flow](docs/images/ticket-purchase.png)
 
-[Your Tickets section after purchase]
+![Your Tickets section after purchase](docs/images/after-purchase.png)
 
-[MySQL Workbench showing ticket record]
+![MySQL Workbench showing ticket record](docs/images/work.png)
