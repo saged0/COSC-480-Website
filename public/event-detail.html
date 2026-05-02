@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Train Ticket Details</title>
+  <link rel="stylesheet" href="/app.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Special+Elite&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-grid">
+      <article class="auth-card">
+        <h2 id="event-name" style="font-family: 'Playfair Display', serif;"></h2>
+        <p id="event-date"></p>
+        <p id="event-price"></p>
+        <div>
+          <button id="connect-wallet" class="welcome-link">Connect MetaMask</button>
+          <button id="buy-ticket" class="welcome-link">Buy Ticket</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="/js/metamask.js"></script>
+  <script>
+    const parts = location.pathname.split('/');
+    const eventId = parts[parts.length-1];
+    let contractAddress = new URLSearchParams(window.location.search).get('contract') || '';
+    let eventPriceEth = '0.05';
+
+    async function loadEvent() {
+      try {
+        const response = await fetch(`/api/events/${eventId}`);
+        if (!response.ok) {
+          throw new Error('Event not found');
+        }
+
+        const data = await response.json();
+        const ev = data.event;
+        contractAddress = ev.contractAddress || contractAddress;
+        eventPriceEth = String(ev.ticketPriceEth);
+        document.getElementById('event-name').textContent = ev.name;
+        document.getElementById('event-date').textContent = `Date: ${new Date(ev.date).toLocaleDateString()}`;
+        document.getElementById('event-price').textContent = `Price: ${Number(ev.ticketPriceEth).toFixed(3)} ETH`;
+      } catch (error) {
+        console.error(error);
+        document.getElementById('event-name').textContent = 'Ticket not available';
+        document.getElementById('event-date').textContent = '';
+        document.getElementById('event-price').textContent = '';
+      }
+    }
+
+    loadEvent();
+
+    document.getElementById('connect-wallet').addEventListener('click', connectWallet);
+    document.getElementById('buy-ticket').addEventListener('click', async () => {
+      const addr = sessionStorage.getItem('walletAddress');
+      if (!addr) {
+        await connectWallet();
+      }
+      await buyTicket(contractAddress, eventPriceEth, eventId);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+    <div class="scene-overlay" aria-hidden="true"></div>
+
+    <div id="status-popup" class="status-popup" role="alert" aria-live="polite" hidden>
+        <span id="status-popup-message">Login was unsuccessful.</span>
+        <button id="close-status-popup" type="button" aria-label="Close message">Close</button>
+    </div>
+
+    <main class="auth-shell">
+        <section class="auth-grid auth-grid-single">
+            <article class="auth-card auth-card-login auth-card-centered">
+                <p class="card-eyebrow">Railbound</p>
+                <h2>Login</h2>
+
+                <form action="/user" method="post">
+                    <div class="input-field">
+                        <input type="text" name="username" id="login-username" placeholder="Enter Username" required>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" name="password" id="login-password" placeholder="Enter Password" required>
+                    </div>
+                    <input type="submit" value="Log In">
+                </form>
+
+                <p class="signup-note">
+                    Don't have an account?
+                    <a class="signup-link" href="/register">Register here</a>
+                </p>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const popup = document.getElementById('status-popup');
+        const popupMessage = document.getElementById('status-popup-message');
+        const closePopupButton = document.getElementById('close-status-popup');
+
+        const messages = {
+            loginError: 'Login was unsuccessful.',
+            registerMissing: 'Choose a username and password.',
+            registerExists: 'That username is already taken.'
+        };
+
+        const statusKey = params.get('loginError') === '1'
+            ? 'loginError'
+            : params.get('registerError') === 'missing'
+                ? 'registerMissing'
+                : params.get('registerError') === 'exists'
+                    ? 'registerExists'
+                    : null;
+
+        closePopupButton.addEventListener('click', () => {
+            popup.hidden = true;
+        });
+
+        if (statusKey) {
+            popupMessage.textContent = messages[statusKey];
+            popup.hidden = false;
+            window.history.replaceState({}, document.title, '/');
+        }
+    </script>
+</body>
+</html>

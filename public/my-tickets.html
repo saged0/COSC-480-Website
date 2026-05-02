@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Your Tickets</title>
+  <link rel="stylesheet" href="/app.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Special+Elite&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-grid">
+      <article class="auth-card">
+        <h2 style="font-family: 'Playfair Display', serif;">Your Tickets</h2>
+        <div id="tickets-list"></div>
+      </article>
+    </section>
+  </main>
+
+  <script src="/js/metamask.js"></script>
+  <script>
+    async function render() {
+      try {
+        const response = await fetch('/api/tickets');
+        if (!response.ok) {
+          document.getElementById('tickets-list').textContent = 'You must be logged in to view tickets.';
+          return;
+        }
+
+        const data = await response.json();
+        const tickets = data.tickets || [];
+        const list = document.getElementById('tickets-list');
+        list.innerHTML = '';
+
+        if (!tickets.length) {
+          list.textContent = 'No tickets found yet.';
+          return;
+        }
+
+        for (const t of tickets) {
+          const div = document.createElement('div');
+          div.className = 'ticket-stub';
+          div.innerHTML = `<div class="ticket-header">Ticket #${t.ticketId}</div><div id="q-${t.id}"></div>`;
+          list.appendChild(div);
+          QRCode.toCanvas(document.getElementById('q-'+t.id), `ticket:${t.ticketId}`);
+        }
+      } catch (error) {
+        console.error(error);
+        document.getElementById('tickets-list').textContent = 'Error loading tickets.';
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>

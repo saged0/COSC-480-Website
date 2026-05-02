@@ -1,107 +1,130 @@
-# COSC-480 Website
+# COSC-480 Capstone — Vintage Train Station Ticketing App
 
-Node.js + Express project with:
-- Session-based login demo (`/`, `/user`, `/logout`)
-- Login credentials backed by MySQL (`users` table)
-- Static HTML/CSS practice page (`/lecture0-exercises`)
+A full-stack web app built with Node.js, Express, MySQL, and Ethereum smart contracts.
+Users log in with session-based auth, connect their MetaMask wallet, and purchase
+event tickets on the Sepolia testnet. Purchases are recorded on-chain and saved to
+a MySQL database.
 
 ## Tech Stack
-- Node.js
-- Express
-- express-session
-- cookie-parser
-- dotenv
-- mysql2
+
+- Node.js + Express
+- express-session + cookie-parser
+- Sequelize ORM + MySQL
+- Hardhat + Solidity (Sepolia testnet)
+- ethers.js (v5, via CDN)
+- Vanilla HTML + CSS
 
 ## Project Structure
-- `server.js`: Main app on port `3000` (DB-backed login + sessions)
-- `app.js`: Session tutorial app on port `4000`
-- `db.js`: MySQL connection and user auth helpers
-- `views/index.html`: Login form
-- `views/user.html`: Logged-in user page
-- `views/app.css`: Login form styles
-- `.env.example`: Environment variable template
+
+- `server.js` — Main app on port 3000
+- `db.js` — Sequelize auth helpers
+- `models/` — Sequelize models (User, Event, Ticket)
+- `services/sequelizeQueries.js` — DB query helpers
+- `migrations/` — Sequelize migration files
+- `contracts/` — Hardhat project with TicketSale.sol
+- `public/` — Frontend HTML, CSS, and client-side JS
+- `.env.example` — Environment variable template
 
 ## Setup
-1. Install dependencies:
-```bash
+
+1. Install root dependencies:
+
+```
 npm install
 ```
 
-2. Create your local env file:
-- Duplicate `.env.example` to `.env`
-- Fill in your database values and session/auth values
+2. Install contract dependencies:
 
-Example values are documented in `.env.example`.
+```
+cd contracts && npm install && cd ..
+```
+
+3. Copy `.env.example` to `.env` and fill in your values.
+
+4. Run database migrations:
+
+```
+npm run db:migrate
+```
 
 ## Run
-- Main app (port 3000):
-```bash
+
+```
 npm start
 ```
-This entrypoint uses MySQL-backed credentials for login and keeps session state with `express-session`.
 
-- Session tutorial app (port 4000):
-```bash
-npm run start:session
+App runs at http://localhost:3000
+
+## Routes
+
+### Auth
+- `GET /` — Login page
+- `POST /user` — Login submit
+- `GET /register` — Registration page
+- `POST /register` — Register submit
+- `GET /logout` — Logout and clear session
+
+### Ticketing (requires login)
+- `GET /user` — Main dashboard with MetaMask connect and ticket purchase
+- `GET /events` — Browse available events
+- `GET /events/:id` — Event detail page
+- `GET /my-tickets` — View purchased tickets
+
+### API
+- `GET /api/events` — List all events
+- `GET /api/events/:id` — Get single event
+- `GET /api/tickets` — Get tickets for logged-in user
+- `POST /api/tickets` — Save a ticket purchase after blockchain confirmation
+
+## Smart Contract
+
+Deployed on Sepolia testnet. The TicketSale.sol contract handles:
+- Ticket purchases via ETH payment
+- Unique ticket ID generation per buyer
+- On-chain ticket ownership tracking
+
+To deploy:
+
 ```
-This entrypoint is focused on the tutorial session/login flow.
-
-## Default Routes (main app)
-- `GET /` login page (or welcome if logged in)
-- `POST /user` login submit
-- `GET /user` logged-in page
-- `GET /logout` logout and clear session
-- `GET /lecture0-exercises` static HTML exercise page
-
-## Screenshots
-### Login page
-<img src="docs/images/login-page.png" alt="Login page" width="800" />
-
-### Failed login state
-<img src="docs/images/login-failed-popup.png" alt="Login unsuccessful popup" width="800" />
-
-### Successful login state
-<img src="docs/images/user-page.png" alt="Logged-in user page" width="800" />
+npm run deploy:sepolia
+```
 
 ## Environment Variables
-Required for database-backed features:
+
+### Database
 - `DB_HOST`
 - `DB_PORT`
 - `DB_USER`
 - `DB_PASSWORD`
 - `DB_NAME`
 
-Session/auth variables:
-- `LOGIN_USERNAME` (seed user inserted on startup if missing)
-- `LOGIN_PASSWORD` (seed password for that user)
+### Session and Auth
 - `SESSION_SECRET`
+- `LOGIN_USERNAME`
+- `LOGIN_PASSWORD`
+
+### Blockchain
+- `SEPOLIA_RPC_URL`
+- `PRIVATE_KEY`
 
 ## Security Notes
-- Do not commit `.env` (already ignored by `.gitignore`).
-- Rotate any password that was ever exposed in logs or screenshots.
-- Use a long, random `SESSION_SECRET` in real deployments.
 
-## Troubleshooting
-- If `npm start` fails with DB errors, verify `.env` values and that MySQL is running.
-- If login fails, confirm a matching record exists in MySQL `users` table.
-- If port `3000` is busy, stop the other process using it and restart.
+- Do not commit `.env` — already ignored by `.gitignore`
+- Passwords are currently stored as plain text — bcrypt hashing is a planned improvement
+- Keep your `PRIVATE_KEY` out of source control at all times
 
-## Optional: Verify Database Quickly
-If login works, your DB setup is likely fine. If you want to verify manually:
+## Screenshots
 
-In MySQL Workbench:
-- Open the `Schemas` tab (bottom-left), refresh, and expand `credentials`.
-- Open table `users` and run `SELECT * FROM users;`.
+![Login page](docs/images/login-page.png)
 
-In terminal:
-```bash
-mysql -u root -p
-```
-Then run:
-```sql
-USE credentials;
-SHOW TABLES;
-DESCRIBE users;
-SELECT * FROM users;
-```
+![Login page](docs/images/user-page.png)
+
+![Login page](docs/images/login-failed-popup.png)
+
+![Dashboard with MetaMask connected](docs/images/meta-mask.png)
+
+![Ticket purchase flow](docs/images/ticket-purchase.png)
+
+![Your Tickets section after purchase](docs/images/after-purchase.png)
+
+![MySQL Workbench showing ticket record](docs/images/work.png)

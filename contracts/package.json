@@ -1,0 +1,40 @@
+{
+  "name": "crypto-bank-account",
+  "version": "1.0.0",
+  "description": "A smart contract for a crypto bank account on Ethereum",
+  "main": "index.js",
+  "scripts": {
+    "test": "hardhat test",
+    "compile": "hardhat compile",
+    "deploy": "hardhat run scripts/deployTicketSale.js",
+    "deploy:bank": "hardhat run scripts/deploy.js",
+    "deploy:sepolia": "node scripts/check-env.js && hardhat run scripts/deployTicketSale.js --network sepolia",
+    "deploy:bank:sepolia": "node scripts/check-env.js && hardhat run scripts/deploy.js --network sepolia",
+    "seed:sepolia": "node scripts/check-env.js && hardhat run scripts/seedTicketSale.js --network sepolia",
+    "node": "hardhat node",
+    "demo": "hardhat run scripts/demo.js",
+    "interact": "hardhat run scripts/interact.js --network sepolia",
+    "interact:local": "hardhat run scripts/interact.js"
+  },
+  "keywords": [
+    "ethereum",
+    "solidity",
+    "smart-contract",
+    "bank",
+    "web3"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "chai": "^4.3.10",
+    "dotenv": "^17.4.2",
+    "ethers": "^6.10.0",
+    "hardhat": "^2.19.0",
+    "hardhat-gas-reporter": "^1.0.9",
+    "solidity-coverage": "^0.8.5"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.6"
+  }
+}

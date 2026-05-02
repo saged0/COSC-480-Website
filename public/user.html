@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/app.css">
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+</head>
+<body class="user-page">
+    <div class="scene-overlay" aria-hidden="true"></div>
+    <div class="firefly-layer" aria-hidden="true">
+        <span class="firefly" style="left:4%; top:14%; animation-duration:6.6s; animation-delay:-1.3s;"></span>
+        <span class="firefly" style="left:10%; top:68%; animation-duration:8.4s; animation-delay:-4.1s;"></span>
+        <span class="firefly" style="left:15%; top:28%; animation-duration:7.2s; animation-delay:-2.6s;"></span>
+        <span class="firefly" style="left:22%; top:82%; animation-duration:9.3s; animation-delay:-5.2s;"></span>
+        <span class="firefly" style="left:29%; top:20%; animation-duration:5.8s; animation-delay:-0.8s;"></span>
+        <span class="firefly" style="left:36%; top:61%; animation-duration:7.9s; animation-delay:-3.4s;"></span>
+        <span class="firefly" style="left:43%; top:12%; animation-duration:6.1s; animation-delay:-1.9s;"></span>
+        <span class="firefly" style="left:50%; top:76%; animation-duration:9.8s; animation-delay:-6.0s;"></span>
+        <span class="firefly" style="left:57%; top:31%; animation-duration:7.4s; animation-delay:-2.2s;"></span>
+        <span class="firefly" style="left:63%; top:84%; animation-duration:8.8s; animation-delay:-4.7s;"></span>
+        <span class="firefly" style="left:69%; top:18%; animation-duration:6.9s; animation-delay:-1.1s;"></span>
+        <span class="firefly" style="left:74%; top:56%; animation-duration:7.7s; animation-delay:-3.8s;"></span>
+        <span class="firefly" style="left:79%; top:10%; animation-duration:5.4s; animation-delay:-0.4s;"></span>
+        <span class="firefly" style="left:83%; top:72%; animation-duration:9.1s; animation-delay:-5.6s;"></span>
+        <span class="firefly" style="left:88%; top:26%; animation-duration:6.4s; animation-delay:-2.9s;"></span>
+        <span class="firefly" style="left:92%; top:64%; animation-duration:8.1s; animation-delay:-4.3s;"></span>
+        <span class="firefly" style="left:7%; top:44%; animation-duration:7.0s; animation-delay:-1.7s;"></span>
+        <span class="firefly" style="left:18%; top:48%; animation-duration:9.6s; animation-delay:-5.0s;"></span>
+        <span class="firefly" style="left:47%; top:44%; animation-duration:6.7s; animation-delay:-2.5s;"></span>
+        <span class="firefly" style="left:71%; top:46%; animation-duration:8.7s; animation-delay:-3.0s;"></span>
+    </div>
+
+    <main class="dashboard-shell">
+        <section class="welcome-card dashboard-hero">
+            <h2>Welcome, Traveller</h2>
+            <p>The station is open. Choose your journey.</p>
+            <div class="dashboard-actions">
+                <button id="connect-wallet" class="welcome-link" type="button">Connect MetaMask</button>
+                <a class="welcome-link" href="/logout">Log out</a>
+            </div>
+            <p class="wallet-address" id="wallet-address" hidden></p>
+        </section>
+
+        <section class="notification-panel" aria-live="polite">
+            <div class="notification-panel-header">
+                <h3>Connection Status</h3>
+                <span class="vintage-stamp">Live</span>
+            </div>
+            <div class="notification-grid">
+                <div class="notification-item">
+                    <span class="notification-label">Wallet</span>
+                    <span id="notification-wallet" class="address-value">Not connected</span>
+                </div>
+                <div class="notification-item">
+                    <span class="notification-label">Balance</span>
+                    <span id="notification-balance">-</span>
+                </div>
+                <div class="notification-item">
+                    <span class="notification-label">Contract Address</span>
+                    <span id="notification-contract" class="address-value" data-short="0xf3F9...7D32">0xf3F906c4bf9376EFcA894ac82dcceCC98f327D32</span>
+                </div>
+                <div class="notification-item">
+                    <span class="notification-label">Deployer</span>
+                    <span id="notification-deployer" class="address-value" data-short="0xA9Be...0eE41">0xA9Be39b8Bd41fd6Bab5bFdf40326efc3D4C0eE41</span>
+                </div>
+                <div class="notification-item">
+                    <span class="notification-label">Status</span>
+                    <span id="notification-status">Waiting for MetaMask</span>
+                </div>
+                <div class="notification-item notification-transaction" id="notification-transaction-wrap" hidden>
+                    <span class="notification-label">Transaction</span>
+                    <a id="notification-transaction" href="#" target="_blank" rel="noreferrer">View receipt</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <div class="section-heading-row">
+                <h3>Available Train Tickets</h3>
+                <p>Choose a train ticket.</p>
+            </div>
+
+            <div class="departure-grid user-departure-grid">
+                <article class="departure-card ticket-stub-card">
+                    <div class="departure-title">Midnight Express</div>
+                    <div class="departure-meta">Date: May 12, 2026</div>
+                    <div class="departure-meta">Location: Platform 9</div>
+                    <div class="departure-price">Price: 0.002 ETH</div>
+                    <button class="ticket-action" type="button" data-event-id="1" data-event="Midnight Express" data-date="May 12, 2026" data-location="Platform 9" data-price="0.002">Buy Ticket</button>
+                </article>
+
+                <article class="departure-card ticket-stub-card">
+                    <div class="departure-title">Sunset Limited</div>
+                    <div class="departure-meta">Date: May 18, 2026</div>
+                    <div class="departure-meta">Location: West Gate</div>
+                    <div class="departure-price">Price: 0.0035 ETH</div>
+                    <button class="ticket-action" type="button" data-event-id="2" data-event="Sunset Limited" data-date="May 18, 2026" data-location="West Gate" data-price="0.0035">Buy Ticket</button>
+                </article>
+
+                <article class="departure-card ticket-stub-card">
+                    <div class="departure-title">Heritage Morning Run</div>
+                    <div class="departure-meta">Date: May 24, 2026</div>
+                    <div class="departure-meta">Location: Central Station</div>
+                    <div class="departure-price">Price: 0.005 ETH</div>
+                    <button class="ticket-action" type="button" data-event-id="3" data-event="Heritage Morning Run" data-date="May 24, 2026" data-location="Central Station" data-price="0.005">Buy Ticket</button>
+                </article>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <div class="section-heading-row">
+                <h3>Your Tickets</h3>
+                <p>Your purchased tickets will appear here with transaction details.</p>
+            </div>
+
+            <div id="my-tickets" class="my-tickets-grid">
+                <p class="empty-state">No tickets yet. Buy a ticket above.</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const connectButton = document.getElementById('connect-wallet');
+        const walletAddress = document.getElementById('wallet-address');
+        const notificationWallet = document.getElementById('notification-wallet');
+        const notificationStatus = document.getElementById('notification-status');
+        const notificationTransactionWrap = document.getElementById('notification-transaction-wrap');
+        const notificationTransaction = document.getElementById('notification-transaction');
+        const myTickets = document.getElementById('my-tickets');
+        const ticketButtons = document.querySelectorAll('.ticket-action');
+        const contractAddress = '0xf3F906c4bf9376EFcA894ac82dcceCC98f327D32';
+        const deployerAddress = '0xA9Be39b8Bd41fd6Bab5bFdf40326efc3D4C0eE41';
+        const ticketAbi = [
+            'function buyTicket(uint256 eventId) payable returns (uint256)',
+            'function getMyTickets() view returns (uint256[])'
+        ];
+        let connectedAddress = '';
+
+        function showWallet(address) {
+            walletAddress.hidden = false;
+            walletAddress.textContent = `Wallet connected: ${truncateAddress(address)}`;
+            notificationWallet.textContent = address;
+        }
+
+        // update balance placeholder when wallet is shown
+        function showBalancePlaceholder() {
+            const balEl = document.getElementById('notification-balance');
+            if (balEl) balEl.textContent = '-';
+        }
+
+        function truncateAddress(addr) {
+            if (!addr) return '';
+            if (addr.length <= 12) return addr;
+            return `${addr.slice(0,6)}...${addr.slice(-4)}`;
+        }
+
+        function setStatus(message) {
+            notificationStatus.textContent = message;
+        }
+
+        function showReceiptLink(txHash, eventName) {
+            notificationTransactionWrap.hidden = false;
+            notificationTransaction.textContent = `Sepolia tx for ${eventName}`;
+            notificationTransaction.href = `https://sepolia.etherscan.io/tx/${txHash}`;
+        }
+
+        function formatTicketDate(ticket) {
+            if (!ticket?.createdAt) {
+                return 'Stored in your account';
+            }
+
+            return `Stored: ${new Date(ticket.createdAt).toLocaleString()}`;
+        }
+
+        function renderTicket(ticket) {
+            const eventName = ticket?.Event?.name || `Ticket #${ticket.ticketId}`;
+            const eventDate = ticket?.Event?.date ? new Date(ticket.Event.date).toLocaleDateString() : 'Date unavailable';
+            const eventPrice = ticket?.Event?.ticketPriceEth != null ? `${Number(ticket.Event.ticketPriceEth).toFixed(3)} ETH` : 'Price unavailable';
+            const txLink = ticket?.txHash ? `https://sepolia.etherscan.io/tx/${ticket.txHash}` : '#';
+            const txMarkup = ticket?.txHash
+                ? `<p><a class="ticket-receipt-link" href="${txLink}" target="_blank" rel="noreferrer">View transaction</a></p>`
+                : '';
+
+            return `
+                <article class="ticket-receipt">
+                    <div class="ticket-receipt-header">
+                        <strong>${eventName}</strong>
+                        <span class="vintage-stamp">Purchased</span>
+                    </div>
+                    <div class="ticket-receipt-body">
+                        <p>${formatTicketDate(ticket)}</p>
+                        <p>Event date: ${eventDate}</p>
+                        <p>Price: ${eventPrice}</p>
+                        <p>Ticket #: ${String(ticket.ticketId)}</p>
+                        ${txMarkup}
+                    </div>
+                </article>
+            `;
+        }
+
+        async function refreshTickets() {
+            try {
+                const response = await fetch('/api/tickets', {
+                    credentials: 'same-origin'
+                });
+                if (!response.ok) {
+                    myTickets.innerHTML = '<p class="empty-state">Log in again to load your saved tickets.</p>';
+                    return;
+                }
+
+                const data = await response.json();
+                const tickets = data.tickets || [];
+
+                if (!tickets.length) {
+                    myTickets.innerHTML = '<p class="empty-state">No tickets yet. Buy a ticket above.</p>';
+                    return;
+                }
+
+                myTickets.innerHTML = tickets.map(renderTicket).join('');
+            } catch (error) {
+                console.error('Failed to load saved tickets:', error);
+                myTickets.innerHTML = '<p class="empty-state">Unable to load saved tickets right now.</p>';
+            }
+        }
+
+        async function connectWallet() {
+            if (!window.ethereum) {
+                alert('MetaMask is not installed.');
+                setStatus('MetaMask is not installed');
+                return;
+            }
+
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            await provider.send('eth_requestAccounts', []);
+            const signer = provider.getSigner();
+            connectedAddress = await signer.getAddress();
+            showWallet(connectedAddress);
+            showBalancePlaceholder();
+            try {
+                const balance = await provider.getBalance(connectedAddress);
+                const balanceEth = ethers.utils.formatEther(balance);
+                const balEl = document.getElementById('notification-balance');
+                if (balEl) balEl.textContent = `${balanceEth} ETH`;
+                setStatus('Wallet connected');
+            } catch (err) {
+                console.error('Balance fetch failed', err);
+            }
+            connectButton.textContent = 'MetaMask Connected';
+            connectButton.disabled = true;
+        }
+
+        function renderEmptyStateIfNeeded() {
+            if (!myTickets.querySelector('.ticket-receipt')) {
+                myTickets.innerHTML = '<p class="empty-state">No tickets yet. Buy a ticket above.</p>';
+            }
+        }
+
+        async function purchaseTicket(button) {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            const contract = new ethers.Contract(contractAddress, ticketAbi, signer);
+            const eventId = Number(button.dataset.eventId);
+            const eventName = button.dataset.event;
+            const date = button.dataset.date;
+            const location = button.dataset.location;
+            const priceEth = button.dataset.price;
+            const value = ethers.utils.parseEther(priceEth);
+
+            setStatus(`Purchasing ${eventName}...`);
+            button.disabled = true;
+
+            try {
+                // Check connected balance before attempting transaction
+                const from = await signer.getAddress();
+                const balance = await provider.getBalance(from);
+                if (balance.lt(value)) {
+                    const balEth = ethers.utils.formatEther(balance);
+                    const msg = `Insufficient ETH balance for this transaction (you have ${balEth} ETH; ticket costs ${priceEth} ETH)`;
+                    setStatus(msg);
+                    alert(msg);
+                    button.disabled = false;
+                    return;
+                }
+                const tx = await contract.buyTicket(eventId, { value });
+                setStatus(`Transaction submitted: ${tx.hash}`);
+                showReceiptLink(tx.hash, eventName);
+
+const receipt = await tx.wait();
+const wallet = await signer.getAddress();
+
+let ticketId = tx.hash;
+try {
+  const readContract = new ethers.Contract(contractAddress, ticketAbi, provider);
+  const tickets = await readContract.getMyTickets();
+  if (tickets && tickets.length > 0) {
+    ticketId = tickets[tickets.length - 1].toString();
+  }
+} catch (contractErr) {
+  console.warn('Could not fetch ticketId from contract, using tx hash:', contractErr);
+}
+
+try {
+  const saveRes = await fetch('/api/tickets', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
+    body: JSON.stringify({
+      eventId,
+      walletAddress: wallet,
+      ticketId,
+      txHash: tx.hash
+    })
+  });
+  const saveData = await saveRes.json();
+  console.log('Ticket save response:', saveRes.status, saveData);
+} catch (err) {
+  console.error('Error saving ticket:', err);
+}
+
+                // refresh balance display after purchase
+                try {
+                    const newBal = await provider.getBalance(await signer.getAddress());
+                    const balEl = document.getElementById('notification-balance');
+                    if (balEl) balEl.textContent = `${ethers.utils.formatEther(newBal)} ETH`;
+                } catch (err) {
+                    console.error('Failed to refresh balance', err);
+                }
+
+                setStatus(`Ticket purchased in block ${receipt.blockNumber}`);
+                await refreshTickets();
+            } catch (error) {
+                console.error('purchaseTicket error:', error);
+                const friendly = friendlyErrorMessage(error);
+                setStatus(friendly);
+                alert(friendly);
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        function friendlyErrorMessage(error) {
+            const raw = error?.reason || error?.data?.message || error?.message || '';
+            const lower = String(raw).toLowerCase();
+            if (lower.includes('insufficient') && lower.includes('fund')) {
+                return 'Insufficient ETH balance for this transaction';
+            }
+            if (lower.includes('user rejected') || lower.includes('cancelled')) {
+                return 'Transaction was rejected by the user';
+            }
+            return 'Transaction failed — check console for details';
+        }
+
+        connectButton.addEventListener('click', connectWallet);
+
+        ticketButtons.forEach((button) => {
+            button.addEventListener('click', async () => {
+                if (!connectedAddress) {
+                    await connectWallet();
+                }
+
+                if (!connectedAddress) {
+                    return;
+                }
+
+                await purchaseTicket(button);
+            });
+        });
+
+        refreshTickets();
+    </script>
+</body>
+</html>

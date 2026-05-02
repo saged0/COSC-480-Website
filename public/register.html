@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+    <div class="scene-overlay" aria-hidden="true"></div>
+
+    <main class="auth-shell">
+        <section class="auth-grid auth-grid-single">
+            <article class="auth-card auth-card-centered">
+                <p class="card-eyebrow">Create account</p>
+                <h2>Register</h2>
+
+                <form id="register-form" action="/register" method="post">
+                    <div class="input-field">
+                        <input type="text" name="username" id="register-username" placeholder="Choose Username" required>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" name="password" id="register-password" placeholder="Choose Password" required>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" name="passwordConfirm" id="register-password-confirm" placeholder="Confirm Password" required>
+                    </div>
+                    <input type="submit" value="Create Account">
+                </form>
+
+                <p class="signup-note">
+                    Already have an account?
+                    <a class="signup-link" href="/">Back to login</a>
+                </p>
+
+                <div id="status-popup" class="status-popup" role="alert" aria-live="polite" hidden>
+                    <span id="status-popup-message">Registration error</span>
+                    <button id="close-status-popup" type="button" aria-label="Close message">Close</button>
+                </div>
+
+                <script>
+                    const form = document.getElementById('register-form');
+                    const popup = document.getElementById('status-popup');
+                    const popupMessage = document.getElementById('status-popup-message');
+                    const closePopup = document.getElementById('close-status-popup');
+
+                    form.addEventListener('submit', (e) => {
+                        const p = document.getElementById('register-password').value;
+                        const pc = document.getElementById('register-password-confirm').value;
+
+                        if (p !== pc) {
+                            e.preventDefault();
+                            popupMessage.textContent = 'Passwords do not match.';
+                            popup.hidden = false;
+                        }
+                    });
+
+                    closePopup.addEventListener('click', () => popup.hidden = true);
+
+                    const params = new URLSearchParams(window.location.search);
+                    const err = params.get('registerError');
+                    if (err) {
+                        const map = {
+                            missing: 'Choose a username and password.',
+                            exists: 'That username is already taken.',
+                            nomatch: 'Passwords did not match.'
+                        };
+
+                        popupMessage.textContent = map[err] || 'Registration failed.';
+                        popup.hidden = false;
+                        window.history.replaceState({}, document.title, '/register');
+                    }
+                </script>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

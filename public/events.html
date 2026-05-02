@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Train Tickets</title>
+    <link rel="stylesheet" href="/app.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Special+Elite&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="auth-shell">
+        <section class="auth-grid">
+            <article class="auth-card">
+                <h2 style="font-family: 'Playfair Display', serif;">Available Train Tickets</h2>
+                <div id="events-grid" class="departure-grid">
+                    <!-- JS will populate event cards here -->
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        async function renderEvents() {
+            const grid = document.getElementById('events-grid');
+            grid.innerHTML = '<p class="empty-state">Loading train tickets...</p>';
+
+            try {
+                const response = await fetch('/api/events');
+                const data = await response.json();
+                const events = data.events || [];
+
+                if (!events.length) {
+                    grid.innerHTML = '<p class="empty-state">No train tickets have been added yet.</p>';
+                    return;
+                }
+
+                grid.innerHTML = '';
+                for (const ev of events) {
+                    const card = document.createElement('div');
+                    card.className = 'departure-card';
+                    const price = Number(ev.ticketPriceEth).toFixed(3);
+                    const remaining = ev.maxTickets ?? '—';
+                    const date = ev.date ? new Date(ev.date).toLocaleDateString() : 'TBA';
+                    card.innerHTML = `
+                        <div class="departure-title">${ev.name}</div>
+                        <div class="departure-meta">${date} &middot; ${price} ETH</div>
+                        <div class="departure-remaining">${remaining} tickets</div>
+                        <div class="departure-actions"><a class="welcome-link" href="/events/${ev.id}?contract=${encodeURIComponent(ev.contractAddress || '')}">View Ticket</a></div>
+                    `;
+                    grid.appendChild(card);
+                }
+            } catch (error) {
+                console.error(error);
+                grid.innerHTML = '<p class="empty-state">Unable to load train tickets right now.</p>';
+            }
+        }
+
+        renderEvents();
+    </script>
+</body>
+</html>

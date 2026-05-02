@@ -6,7 +6,12 @@
     "test": "npm run check",
     "check": "node --check server.js && node --check app.js",
     "start": "node server.js",
-    "start:session": "node app.js"
+    "start:session": "node app.js",
+    "db:migrate": "sequelize-cli db:migrate",
+    "db:migrate:undo": "sequelize-cli db:migrate:undo",
+    "db:migrate:undo:all": "sequelize-cli db:migrate:undo:all",
+    "deploy:sepolia": "cd contracts && npm run deploy:sepolia",
+    "seed:sepolia": "cd contracts && npm run seed:sepolia"
   },
   "keywords": [
     "node",
@@ -22,6 +27,10 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
-    "mysql2": "^3.18.2"
+    "mysql2": "^3.18.2",
+    "sequelize": "^6.37.8"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.5"
   }
 }
