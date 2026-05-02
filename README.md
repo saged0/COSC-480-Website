@@ -117,6 +117,10 @@ npm run deploy:sepolia
 
 ![Login page](docs/images/login-page.png)
 
+![Login page](docs/images/user-page.png)
+
+![Login page](docs/images/login-failed-popup.png)
+
 ![Dashboard with MetaMask connected](docs/images/meta-mask.png)
 
 ![Ticket purchase flow](docs/images/ticket-purchase.png)
