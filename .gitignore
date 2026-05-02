@@ -1,6 +1,0 @@
-node_modules/
-.env
-.env.*
-!.env.example
-app.db
-*.log
