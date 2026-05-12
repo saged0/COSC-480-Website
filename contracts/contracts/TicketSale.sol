@@ -20,6 +20,7 @@ contract TicketSale is Ownable {
 
     uint256 public eventCount;
     uint256 public ticketCounter;
+    uint256 public adminBalance;
 
     mapping(uint256 => EventInfo) public events;
     mapping(uint256 => Ticket) public tickets;
@@ -27,6 +28,7 @@ contract TicketSale is Ownable {
 
     event EventCreated(uint256 indexed eventId, string name, uint256 date, uint256 priceWei, uint256 maxTickets);
     event TicketPurchased(uint256 indexed ticketId, uint256 indexed eventId, address indexed buyer, uint256 value);
+    event AdminWithdrawal(address indexed admin, uint256 amount);
 
     function createEvent(string calldata name, uint256 date, uint256 priceWei, uint256 maxTickets) external onlyOwner {
         require(bytes(name).length > 0, "Name required");
@@ -55,6 +57,7 @@ contract TicketSale is Ownable {
         ticketCounter++;
         tickets[ticketCounter] = Ticket({ eventId: eventId, owner: msg.sender });
         ownerTickets[msg.sender].push(ticketCounter);
+        adminBalance += msg.value;
 
         emit TicketPurchased(ticketCounter, eventId, msg.sender, msg.value);
         return ticketCounter;
@@ -73,5 +76,14 @@ contract TicketSale is Ownable {
     function getTicket(uint256 ticketId) external view returns (uint256, address) {
         Ticket storage t = tickets[ticketId];
         return (t.eventId, t.owner);
+
+    function withdrawAdminBalance() external onlyOwner {
+        require(adminBalance > 0, "No balance to withdraw");
+        uint256 amount = adminBalance;
+        adminBalance = 0;
+        (bool success, ) = owner().call{value: amount}("");
+        require(success, "Withdrawal failed");
+        emit AdminWithdrawal(msg.sender, amount);
+    }
     }
 }

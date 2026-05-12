@@ -1,14 +1,18 @@
 /* Minimal MetaMask / ethers.js helpers (v5) */
 async function connectWallet() {
+  console.log('connectWallet called');
   if (!window.ethereum) {
+    console.log('MetaMask not found');
     alert('MetaMask not found');
     return null;
   }
 
+  console.log('Connecting to MetaMask...');
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   await provider.send('eth_requestAccounts', []);
   const signer = provider.getSigner();
   const address = await signer.getAddress();
+  console.log('Connected address:', address);
   sessionStorage.setItem('walletAddress', address);
   return address;
 }
@@ -76,3 +80,47 @@ async function loadMyTickets(contractAddress, walletAddress) {
 window.connectWallet = connectWallet;
 window.buyTicket = buyTicket;
 window.loadMyTickets = loadMyTickets;
+
+async function getAdminBalance(contractAddress) {
+  if (!window.ethereum) {
+    alert('MetaMask required');
+    return null;
+  }
+
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const abi = ['function adminBalance() view returns (uint256)'];
+    const contract = new ethers.Contract(contractAddress, abi, provider);
+    const balance = await contract.adminBalance();
+    return ethers.utils.formatEther(balance);
+  } catch (err) {
+    console.error('Error fetching admin balance:', err);
+    return null;
+  }
+}
+
+async function withdrawAdminBalance(contractAddress) {
+  if (!window.ethereum) {
+    alert('MetaMask required');
+    return;
+  }
+
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const abi = ['function withdrawAdminBalance() external'];
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+
+    const tx = await contract.withdrawAdminBalance();
+    const receipt = await tx.wait();
+    alert('Withdrawal successful! Tx: ' + receipt.transactionHash);
+    return receipt;
+  } catch (err) {
+    console.error('Error withdrawing:', err);
+    alert('Withdrawal failed: ' + err.message);
+    return null;
+  }
+}
+
+window.getAdminBalance = getAdminBalance;
+window.withdrawAdminBalance = withdrawAdminBalance;

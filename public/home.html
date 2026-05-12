@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railbound - Discover & Attend Events</title>
+    <link rel="stylesheet" href="/app.css">
+    <style>
+        body {
+            overflow-y: auto;
+        }
+
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(27, 43, 34, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--paper-100);
+            text-decoration: none;
+            font-family: Georgia, serif;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--paper-100);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--paper-200);
+        }
+
+        .nav-cta {
+            background: var(--moss-500);
+            color: var(--paper-100);
+            padding: 0.6rem 1.5rem;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            background: var(--moss-700);
+        }
+
+        main {
+            padding-top: 70px;
+            display: block;
+            width: 100%;
+            place-items: unset;
+        }
+
+        .hero-section {
+            min-height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            z-index: 2;
+        }
+
+        .hero-eyebrow {
+            color: var(--moss-500);
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            color: var(--paper-100);
+            margin: 0 0 1.5rem 0;
+            font-weight: normal;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--paper-200);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: Georgia, serif;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--moss-500);
+            color: var(--paper-100);
+        }
+
+        .btn-primary:hover {
+            background: var(--moss-700);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--paper-100);
+            border: 2px solid var(--moss-500);
+        }
+
+        .btn-secondary:hover {
+            background: var(--moss-500);
+            transform: translateY(-2px);
+        }
+
+        .features-section {
+            max-width: 1200px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--paper-100);
+            margin-bottom: 4rem;
+            font-weight: normal;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-bottom: 6rem;
+        }
+
+        .feature-card {
+            background: rgba(95, 125, 100, 0.1);
+            padding: 2.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--line);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background: rgba(95, 125, 100, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: var(--paper-100);
+            font-size: 1.3rem;
+            margin: 0 0 1rem 0;
+            font-weight: normal;
+        }
+
+        .feature-card p {
+            color: var(--paper-200);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .cta-section {
+            background: rgba(95, 125, 100, 0.08);
+            border: 1px solid var(--line);
+            padding: 4rem 2rem;
+            text-align: center;
+            margin: 6rem auto 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 4px;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            color: var(--paper-100);
+            margin: 0 0 1rem 0;
+            font-weight: normal;
+        }
+
+        .cta-section p {
+            color: var(--paper-200);
+            margin-bottom: 2rem;
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 6rem 0;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            color: var(--moss-500);
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: var(--paper-200);
+            margin-top: 0.5rem;
+        }
+
+        footer {
+            background: rgba(27, 43, 34, 0.95);
+            color: var(--paper-200);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid var(--line);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scene-overlay" aria-hidden="true"></div>
+
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">RAILBOUND</a>
+            <div class="nav-links">
+                <a href="/login">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero-section">
+            <div class="hero-content">
+                <p class="hero-eyebrow">Welcome to</p>
+                <h1 class="hero-title">Railbound</h1>
+                <p class="hero-subtitle">Discover unforgettable events and secure your tickets on the blockchain</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-secondary" onclick="window.location.href='/register'">Sign Up Now</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Railbound. Secure ticketing on the blockchain. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -39,10 +39,14 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 
+// Route handlers BEFORE static middleware
 app.get('/', (req, res) => {
+  return res.sendFile(path.join(__dirname, 'public', 'home.html'));
+});
+
+app.get('/login', (req, res) => {
   session = req.session;
   if (session.userid) {
     return res.redirect('/user');
@@ -50,6 +54,9 @@ app.get('/', (req, res) => {
 
   return res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+// Static middleware AFTER routes
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/user', async (req, res) => {
   if (!isDatabaseConfigured()) {
@@ -150,6 +157,12 @@ function ensureLoggedIn(req, res, next) {
   }
 
   if (!req.session.user) return res.redirect('/');
+
+  // Prevent caching of authenticated pages
+  res.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+
   return next();
 }
 
@@ -243,11 +256,15 @@ app.post('/api/tickets', async (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
+  res.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+
   req.session.destroy((err) => {
     if (err) {
       return res.send('Error while logging out');
     }
-
+    res.clearCookie('connect.sid');
     return res.redirect('/');
   });
 });

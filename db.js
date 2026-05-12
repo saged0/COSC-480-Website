@@ -41,7 +41,7 @@ async function authenticateUser(username, password) {
   const normalizedUsername = username?.trim()
 
   const user = await User.findOne({
-    attributes: ['user_id', 'username'],
+    attributes: ['user_id', 'username', 'isAdmin'],
     where: {
       username: normalizedUsername,
       password
@@ -52,7 +52,7 @@ async function authenticateUser(username, password) {
     return null
   }
 
-  return { user_id: user.user_id, username: user.username }
+  return { user_id: user.user_id, username: user.username, isAdmin: user.isAdmin || false }
 }
 
 async function registerUser(username, password) {

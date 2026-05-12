@@ -1,4 +1,4 @@
-# COSC-480 Capstone — Vintage Train Station Ticketing App
+# COSC-480 Capstone: Train Station Ticketing App
 
 A full-stack web app built with Node.js, Express, MySQL, and Ethereum smart contracts.
 Users log in with session-based auth, connect their MetaMask wallet, and purchase
@@ -24,6 +24,15 @@ a MySQL database.
 - `contracts/` — Hardhat project with TicketSale.sol
 - `public/` — Frontend HTML, CSS, and client-side JS
 - `.env.example` — Environment variable template
+
+## Frontend
+
+The homepage (`public/home.html`) is a clean landing page featuring:
+- Navigation bar with logo and Login link
+- Hero section with title, subtitle, and Sign Up button
+- Optimized for minimal vertical space
+
+Other pages include event browsing, ticket purchase, user dashboard, and login/registration forms.
 
 ## Setup
 
@@ -57,14 +66,15 @@ App runs at http://localhost:3000
 
 ## Routes
 
-### Auth
-- `GET /` — Login page
-- `POST /user` — Login submit
+### Public Pages
+- `GET /` — Home page (landing page with Sign Up button)
 - `GET /register` — Registration page
+- `GET /login` — Login page
 - `POST /register` — Register submit
+- `POST /user` — Login submit
 - `GET /logout` — Logout and clear session
 
-### Ticketing (requires login)
+### Authenticated Routes (requires login)
 - `GET /user` — Main dashboard with MetaMask connect and ticket purchase
 - `GET /events` — Browse available events
 - `GET /events/:id` — Event detail page
@@ -123,8 +133,9 @@ npm run deploy:sepolia
 
 ![Dashboard with MetaMask connected](docs/images/meta-mask.png)
 
-![Ticket purchase flow](docs/images/ticket-purchase.png)
 
-![Your Tickets section after purchase](docs/images/after-purchase.png)
+![Your Tickets section after purchase](docs/images/tickets.png)
+
+![Ticket purchase flow](docs/images/ticket-purchase.png)
 
 ![MySQL Workbench showing ticket record](docs/images/work.png)

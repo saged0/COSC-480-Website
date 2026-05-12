@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/app.css">
+    <style>
+        .admin-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .admin-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #ddd;
+        }
+        .admin-section:last-child {
+            border-bottom: none;
+        }
+        .balance-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin: 1rem 0;
+        }
+        .admin-button {
+            padding: 10px 20px;
+            margin-top: 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .admin-button:hover {
+            background-color: #0056b3;
+        }
+        .admin-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .status-message {
+            margin-top: 1rem;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        .status-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status-message.loading {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="scene-overlay" aria-hidden="true"></div>
+
+    <main class="admin-container">
+        <h1>Admin Dashboard</h1>
+
+        <div class="admin-section">
+            <h2>Revenue Management</h2>
+            
+            <div>
+                <label for="contractAddress">Contract Address:</label>
+                <input type="text" id="contractAddress" placeholder="0x..." style="width: 100%; padding: 8px; margin-top: 0.5rem;" />
+            </div>
+
+            <button class="admin-button" onclick="loadAdminBalance()">Load Balance</button>
+            
+            <div class="balance-display" id="balance-display" style="display: none;">
+                Balance: <span id="balance-value">0</span> ETH
+            </div>
+
+            <button class="admin-button" id="withdraw-button" onclick="handleWithdraw()" style="background-color: #28a745; display: none;">
+                Withdraw Funds
+            </button>
+
+            <div id="status-message" class="status-message"></div>
+        </div>
+
+        <div class="admin-section">
+            <button class="admin-button" onclick="connectWallet()" style="background-color: #6c757d;">
+                Connect Wallet
+            </button>
+            <div id="wallet-address" style="margin-top: 1rem; font-size: 0.9rem; color: #666;"></div>
+        </div>
+
+        <div class="admin-section">
+            <a href="/admin/logout" style="color: #dc3545; text-decoration: none;">Log out</a>
+        </div>
+    </main>
+
+    <script src="https://cdn.ethers.io/lib/ethers-5.umd.min.js"></script>
+    <script src="/js/metamask.js"></script>
+    <script>
+        async function loadAdminBalance() {
+            const contractAddress = document.getElementById('contractAddress').value;
+            if (!contractAddress) {
+                showMessage('Please enter a contract address', 'error');
+                return;
+            }
+
+            showMessage('Loading balance...', 'loading');
+            const balance = await getAdminBalance(contractAddress);
+            
+            if (balance !== null) {
+                document.getElementById('balance-value').textContent = parseFloat(balance).toFixed(6);
+                document.getElementById('balance-display').style.display = 'block';
+                document.getElementById('withdraw-button').style.display = 'block';
+                document.getElementById('withdraw-button').onclick = () => handleWithdraw(contractAddress);
+                showMessage('Balance loaded successfully', 'success');
+            } else {
+                showMessage('Failed to load balance', 'error');
+            }
+        }
+
+        async function handleWithdraw(contractAddress) {
+            if (!contractAddress) {
+                contractAddress = document.getElementById('contractAddress').value;
+            }
+            if (!contractAddress) {
+                showMessage('Please enter a contract address', 'error');
+                return;
+            }
+
+            const confirmed = confirm('Are you sure you want to withdraw the entire admin balance?');
+            if (!confirmed) return;
+
+            showMessage('Processing withdrawal...', 'loading');
+            const result = await withdrawAdminBalance(contractAddress);
+            
+            if (result) {
+                showMessage('Withdrawal successful!', 'success');
+                setTimeout(() => loadAdminBalance(), 2000);
+            } else {
+                showMessage('Withdrawal failed', 'error');
+            }
+        }
+
+        function showMessage(message, type) {
+            const messageEl = document.getElementById('status-message');
+            messageEl.textContent = message;
+            messageEl.className = `status-message ${type}`;
+            messageEl.style.display = 'block';
+        }
+
+        // Display connected wallet address
+        window.addEventListener('load', () => {
+            const walletAddress = sessionStorage.getItem('walletAddress');
+            if (walletAddress) {
+                document.getElementById('wallet-address').textContent = 'Connected: ' + walletAddress;
+            }
+        });
+    </script>
+</body>
+</html>
